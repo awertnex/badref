@@ -1,5 +1,7 @@
 # badref
-badref is a music referencer written kinda badly, the sole purpose is immediate switching between different versions of the same audio.
+badref, a Music Referencer, but Written Kinda Badly.
+The Sole Purpose is Immediate Switching Between Different Versions of the Same Audio.
+
 
 Main Features:
 - Loading All Audio Files Named as "[test 000] Artist - Song Name" and Displaying Them as One Audio File in the Playlist.
