@@ -8,7 +8,7 @@
 
 #include "h/dir.h"
 
-//#define TEST_SORT_STR_ARR
+#define TEST_SORT_STR_ARR
 #ifdef TEST_SORT_STR_ARR
 str contents[2048][1024];
 u16 file_count = 0;
@@ -21,6 +21,8 @@ char parse_file_type(u8 *type)
 		return '/';
 	return 0;
 }
+
+void sort_str_arr2();
 
 int main()
 {
@@ -40,9 +42,6 @@ int main()
 	closedir(dir);
 	sort_str_arr();
 	swap_strings(contents[0], contents[1]);
-
-	for (u16 i = 0; i < 2047 && contents[i][0] != 0; ++i)
-		printf("%s\n", contents[i]); /*temp*/
 }
 
 void swap_strings(str *s1, str *s2)
@@ -55,16 +54,20 @@ void swap_strings(str *s1, str *s2)
 
 void sort_str_arr()
 {
-	u8 parse, s1 = 0, s2 = 0;
-	for (u16 i = 0; i < 2047 && contents[i + 1][0] != 0; ++i, parse = 1)
+	u8 parse = 1, s1, s2;
+	for (u16 i = 0, j = 1;
+			i < 2047 && j < 1023 && contents[i + 1][0];
+			++j, parse = 1)
 	{
-		if (contents[i][0] == '.' && i == 2) s1 = 1;
-		if (contents[i + 1][0] == '.' && i == 2) s2 = 1;
+		if (contents[i][0] == '.' && i >= 2) s1 = 1;
+		else s1 = 0;
+		if (contents[i + 1][0] == '.' && i >= 2) s2 = 1;
+		else s2 = 0;
 
-		if (tolower(contents[i][s1]) == tolower(contents[i + 1][s2]))
-			for (u16 j = 1; j < 1024; ++j)
+		if (toupper(contents[i][s1]) == toupper(contents[i + 1][s2]))
+			for (; j < 1023; ++j)
 			{
-				if (tolower(contents[i][j + s1]) > tolower(contents[i + 1][j + s2]))
+				if (toupper(contents[i][j + s1]) > toupper(contents[i + 1][j + s2]))
 				{
 					swap_strings(contents[i], contents[i + 1]);
 					parse = 0;
@@ -72,17 +75,42 @@ void sort_str_arr()
 				}
 			}
 
-		if (parse && tolower(contents[i][s1]) > tolower(contents[i + 1][s2]))
+		if (parse && toupper(contents[i][s1]) > toupper(contents[i + 1][s2]))
+		{
+			swap_strings(contents[i], contents[j]);
+			i = 0;
+		}
+	}
+
+	/* old: unfinished
+	u8 parse = 1, s1, s2;
+	for (u16 i = 0; i < 2047 && contents[i + 1][0]; ++i, parse = 1)
+	{
+		if (contents[i][0] == '.' && i == 2) s1 = 1;
+		else s1 = 0;
+		if (contents[i + 1][0] == '.' && i == 2) s2 = 1;
+		else s2 = 0;
+
+		if (toupper(contents[i][s1]) == toupper(contents[i + 1][s2]))
+			for (u16 j = 1; j < 1023; ++j)
+			{
+				if (toupper(contents[i][j + s1]) > toupper(contents[i + 1][j + s2]))
+				{
+					swap_strings(contents[i], contents[i + 1]);
+					parse = 0;
+					break;
+				}
+			}
+
+		if (parse && toupper(contents[i][s1]) > toupper(contents[i + 1][s2]))
 		{
 			swap_strings(contents[i], contents[i + 1]);
 			i = 0;
 		}
-		s1 = 0;
-		s2 = 0;
 	}
-
+	*/
 	for (u16 i = 0; i < 2047 && contents[i][0] != 0; ++i)
-		printf("%s\n", contents[i]); /*temp*/
+		printf("%s\n", contents[i]); //temp
 }
 
 #endif /* TEST_SORT_STR_ARR */
