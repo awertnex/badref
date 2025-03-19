@@ -2,9 +2,6 @@
 resources/
 icons/
 
-# Log Files
-tasks
-
 # Prerequisites
 *.d
 
