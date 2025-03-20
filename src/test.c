@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 #include <dirent.h>
@@ -22,10 +21,11 @@ char parse_file_type(u8 *type)
 	return 0;
 }
 
-void sort_str_arr2();
+void swap_bits(char *c1, char *c2, u8 bit_count);
 
 int main()
 {
+	/*
 	dir = opendir(getenv("HOME"));
 	for (u16 i = 0; i < 2048 && contents[i][0] != 0; ++i)
 		memset(contents[i], 0, 1024);
@@ -40,8 +40,10 @@ int main()
 	}
 
 	closedir(dir);
-	sort_str_arr();
-	swap_strings(contents[0], contents[1]);
+	*/
+	//sort_str_arr();
+	//swap_strings(contents[0], contents[1]);
+	return 0;
 }
 
 void swap_strings(str *s1, str *s2)
@@ -64,51 +66,25 @@ void sort_str_arr()
 		if (contents[i + 1][0] == '.' && i >= 2) s2 = 1;
 		else s2 = 0;
 
-		if (toupper(contents[i][s1]) == toupper(contents[i + 1][s2]))
-			for (; j < 1023; ++j)
+		if (tolower(contents[i][s1]) == tolower(contents[i + 1][s2]))
+			for (; j < 1023 && contents[i][j + s1] && contents[i + 1][j + s2]; ++j)
 			{
-				if (toupper(contents[i][j + s1]) > toupper(contents[i + 1][j + s2]))
+				if (tolower(contents[i][j + s1]) > tolower(contents[i + 1][j + s2]))
 				{
 					swap_strings(contents[i], contents[i + 1]);
+					i = 0;
 					parse = 0;
 					break;
 				}
 			}
 
-		if (parse && toupper(contents[i][s1]) > toupper(contents[i + 1][s2]))
+		if (parse && tolower(contents[i][s1]) > tolower(contents[i + 1][s2]))
 		{
 			swap_strings(contents[i], contents[j]);
 			i = 0;
 		}
 	}
 
-	/* old: unfinished
-	u8 parse = 1, s1, s2;
-	for (u16 i = 0; i < 2047 && contents[i + 1][0]; ++i, parse = 1)
-	{
-		if (contents[i][0] == '.' && i == 2) s1 = 1;
-		else s1 = 0;
-		if (contents[i + 1][0] == '.' && i == 2) s2 = 1;
-		else s2 = 0;
-
-		if (toupper(contents[i][s1]) == toupper(contents[i + 1][s2]))
-			for (u16 j = 1; j < 1023; ++j)
-			{
-				if (toupper(contents[i][j + s1]) > toupper(contents[i + 1][j + s2]))
-				{
-					swap_strings(contents[i], contents[i + 1]);
-					parse = 0;
-					break;
-				}
-			}
-
-		if (parse && toupper(contents[i][s1]) > toupper(contents[i + 1][s2]))
-		{
-			swap_strings(contents[i], contents[i + 1]);
-			i = 0;
-		}
-	}
-	*/
 	for (u16 i = 0; i < 2047 && contents[i][0] != 0; ++i)
 		printf("%s\n", contents[i]); //temp
 }
