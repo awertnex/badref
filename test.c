@@ -39,7 +39,7 @@ int main()
 
 	closedir(dir);
 	*/
-	//sort_str_arr();
+	sort_str_arr();
 	//swap_strings(contents[0], contents[1]);
 	return 0;
 }
@@ -52,8 +52,23 @@ void swap_strings(str *s1, str *s2)
 	snprintf(s2, 1024, "%s", temp);
 }
 
+str str_arr[5][16] =
+{
+	"cwfee",
+	"abraham",
+	"natapatthi",
+	"..",
+	".",
+};
+
 void sort_str_arr()
 {
+	u8 i = 0;
+	while (i < 5)
+	{
+		printf("arr: %s\n", str_arr[i]);
+		++i;
+	}
 	u8 parse = 1, s1, s2;
 	for (u16 i = 0, j = 1;
 			i < 2047 && j < 1023 && contents[i + 1][0];
