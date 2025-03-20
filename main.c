@@ -13,7 +13,7 @@ _section_main ==================================================================
 #include "gui.c"
 #include "dir.c"
 #include "config.c"
-#include "h/main.h"
+#include "main.h"
 
 // ---- variables --------------------------------------------------------------
 Camera2D camera = {0};

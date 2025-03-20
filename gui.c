@@ -19,9 +19,9 @@ _section_logic =================================================================
 #include <raylib.h>
 #include <rlgl.h>
 
-#include "h/gui.h"
-#include "h/dir.h"
-#include "h/main.h"
+#include "gui.h"
+#include "dir.h"
+#include "main.h"
 
 // ---- variables --------------------------------------------------------------
 Vector2 cursor;

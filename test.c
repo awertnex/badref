@@ -5,7 +5,7 @@
 
 #include <types.h>
 
-#include "h/dir.h"
+#include "dir.h"
 
 #define TEST_SORT_STR_ARR
 #ifdef TEST_SORT_STR_ARR
