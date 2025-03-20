@@ -5,8 +5,8 @@
 #include <string.h>
 #include <dirent.h>
 
-#include "dir.h"
-#include "main.h"
+#include "h/dir.h"
+#include "h/main.h"
 
 // ---- variables --------------------------------------------------------------
 str path[4096];
