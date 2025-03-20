@@ -21,8 +21,6 @@ char parse_file_type(u8 *type)
 	return 0;
 }
 
-void swap_bits(char *c1, char *c2, u8 bit_count);
-
 int main()
 {
 	/*
