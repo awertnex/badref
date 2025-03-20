@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <types.h>
 
 void print_bits(u64 x, u8 bit_count)
@@ -17,3 +18,10 @@ void swap_bits(char *c1, char *c2, u8 bit_count)
 		*c2 ^= (1 << i);
 	}
 }
+
+void swap_strings(str *s1, str *s2)
+{
+	for (u16 i = 0; i <= strlen(s1) || i <= strlen(s2); ++i)
+		swap_bits(&s1[i], &s2[i], 8);
+}
+
