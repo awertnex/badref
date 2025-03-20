@@ -5,7 +5,8 @@
 
 #include <types.h>
 
-#include "h/dir.h"
+//#include "h/dir.h"
+
 
 #define TEST_SORT_STR_ARR
 #ifdef TEST_SORT_STR_ARR
@@ -20,6 +21,8 @@ char parse_file_type(u8 *type)
 		return '/';
 	return 0;
 }
+
+void sort_str_arr();
 
 int main()
 {
@@ -52,23 +55,23 @@ void swap_strings(str *s1, str *s2)
 	snprintf(s2, 1024, "%s", temp);
 }
 
-str str_arr[5][16] =
+str str_arr[7][16] =
 {
 	"cwfee",
 	"abraham",
 	"natapatthi",
+	"natapatt",
+	"natapethi",
 	"..",
 	".",
 };
 
 void sort_str_arr()
 {
-	u8 i = 0;
-	while (i < 5)
-	{
+	u8 i = 7;
+	while (--i)
 		printf("arr: %s\n", str_arr[i]);
-		++i;
-	}
+
 	u8 parse = 1, s1, s2;
 	for (u16 i = 0, j = 1;
 			i < 2047 && j < 1023 && contents[i + 1][0];
