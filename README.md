@@ -1,4 +1,4 @@
-# badref - v1.0.0 alpha
+# badref  -  v0.1.1
 badref, a Music Referencer, but Written Kinda Badly.
 The Sole Purpose is Immediate Switching Between Different Versions of the Same Audio.
 
