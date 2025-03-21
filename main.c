@@ -25,7 +25,7 @@ u8 ModeDebug = 0;
 int main(void)
 {
 	// ---- _section_main_init -------------------------------------------------
-	InitWindow(1280, 720, "Bad Referencer");
+	InitWindow(1280, 720, "badref");
 	SetWindowState(FLAG_WINDOW_RESIZABLE);
 	SetWindowMinSize(720, 450);
 	state |= STATE_RUNNING;
