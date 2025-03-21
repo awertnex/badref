@@ -29,6 +29,18 @@ u16 file_count = 0;
 DIR *dir;
 struct dirent *drnt;
 
+// ---- signatures -------------------------------------------------------------
+void init_gui();
+void update_gui();
+void update_path();
+void tokenize_contents(u16 content_index, u8 *type);
+bool check_is_directory(str *content);
+void input_listen_navigate(u16 content_index);
+void input_listen();
+char parse_file_type(u8 *type);
+void init_dir();
+
+
 void init_gui()
 {
 	InitWindow(420, 420, "badref");
