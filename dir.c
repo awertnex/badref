@@ -7,6 +7,7 @@
 
 #include "h/dir.h"
 #include "h/main.h"
+#include "logic.c"
 
 // ---- variables --------------------------------------------------------------
 str path[4096];
@@ -25,7 +26,9 @@ void init_path()
 void parse_path()
 {
 	file_count = 0;
-	dir = opendir(path);
+	dir = opendir(getenv("HOME"));
+	for (u16 i = 0; i < 2048 && contents[i][0] != 0; ++i)
+		memset(contents[i], 0, 1024);
 
 	if (dir)
 	{
@@ -38,8 +41,7 @@ void parse_path()
 	}
 
 	closedir(dir);
-	sort_str_arr();
-	swap_strings(contents[0], contents[1]);
+	sort_string_array();
 	return;
 	state &= ~STATE_CONTENTS_AVAILABLE;
 }
@@ -59,9 +61,6 @@ void update_path(str *content)
 	printf("path: %s\ncontents: %s\n", path, content); /*temp*/
 }
 
-// =============================================================================
-// ==== _section_logic =========================================================
-// =============================================================================
 char parse_file_type(u8 *type)
 {
 	if (*type == 4)
@@ -69,39 +68,32 @@ char parse_file_type(u8 *type)
 	return 0;
 }
 
-void swap_strings(str *s1, str *s2)
+/*
+void sort_string_array()
 {
-	str temp[1024] = {0};
-	snprintf(temp, 1024, "%s", s1);
-	snprintf(s1, 1024, "%s", s2);
-	snprintf(s2, 1024, "%s", temp);
-}
-
-void sort_str_arr()
-{
-	u8 parse, s1 = 0, s2 = 0;
-	for (u16 i = 0; i < 2047 && contents[i + 1][0] != 0; ++i, parse = 1)
+	u8 parse;
+	for (u16 i = 0; contents[i + 1] && parse; ++i, parse = 0)
 	{
-		//if (contents[i][0] == '.' && i == 2) s1 = 1;
-		//if (contents[i + 1][0] == '.' && i == 2) s2 = 1;
-
-		if (tolower(contents[i][s1]) == tolower(contents[i + 1][s2]))
-			for (u16 j = 1; j < 1024; ++j)
+		for (u16 j = 0; j < 2047 && contents[j + 1][0]; ++j)
+		{
+			if (tolower(contents[j][0]) > tolower(contents[j + 1][0]))
 			{
-				if (tolower(contents[i][j + s1]) > tolower(contents[i + 1][j + s2]))
-				{
-					swap_strings(contents[i], contents[i + 1]);
-					parse = 0;
-					break;
-				}
+				swap_strings(contents[j], contents[j + 1]);
+				parse = 1;
+				continue;
 			}
 
-		if (parse && tolower(contents[i][s1]) > tolower(contents[i + 1][s2]))
-		{
-			swap_strings(contents[i], contents[i + 1]);
-			i = 0;
+			if (tolower(contents[j][0]) == tolower(contents[j + 1][0]))
+				for (u16 k = 1; k < 1023 && (contents[i][k] || contents[i + 1][k]); ++k)
+				{
+					if (tolower(contents[j][k]) > tolower(contents[j + 1][k]))
+					{
+						swap_strings(contents[j], contents[j + 1]);
+						parse = 1;
+						break;
+					}
+				}
 		}
-		s1 = 0;
-		s2 = 0;
 	}
 }
+*/
