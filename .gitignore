@@ -2,10 +2,6 @@
 resources/
 icons/
 
-# Output Files
-badref
-test
-
 # Prerequisites
 *.d
 

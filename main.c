@@ -6,14 +6,12 @@ _section_main ==================================================================
  * [ ] remove the little last character appended to .config/badref.conf
  */
 
-#include <stdio.h>
-
 #include <raylib.h>
 
 #include "gui.c"
 #include "dir.c"
 #include "config.c"
-#include "main.h"
+#include "h/main.h"
 
 // ---- variables --------------------------------------------------------------
 Camera2D camera = {0};
