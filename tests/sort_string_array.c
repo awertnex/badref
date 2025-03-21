@@ -11,8 +11,8 @@
 
 #include <types.h>
 
-#include "h/dir.h"
-#include "logic.c"
+#include "../h/dir.h"
+#include "../logic.c"
 
 str contents[2048][1024] =
 {
