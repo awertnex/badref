@@ -24,6 +24,7 @@ u8 running = 1;
 str path[512];
 str path_next[512];
 str contents[264][512];
+str dir_next_name[512];
 u16 content_index = 0;
 u16 file_count = 0;
 DIR *dir;
@@ -32,8 +33,9 @@ struct dirent *drnt;
 // ---- signatures -------------------------------------------------------------
 void init_gui();
 void update_gui();
-void update_path();
+void update_path(str *content);
 void tokenize_contents(u16 content_index, u8 *type);
+str untokenize_contents(u16 content_index);
 bool check_is_directory(str *content);
 void input_listen_navigate(u16 content_index);
 void input_listen();
@@ -57,14 +59,24 @@ void update_gui()
 }
 
 // ==== _section_testing =======================================================
-void update_path()
+void update_path(str *content)
 {
+    snprintf(path_next, 512, "%s", path);
+    strncat(path_next, content, 128);
+    snprintf(path, 512, "%s", path_next);
 }
 
 void tokenize_contents(u16 content_index, u8 *type)
 {
     if (*type == 4)
         strncat(contents[content_index], "{.dir}", 7);
+}
+
+str untokenize_contents(u16 content_index)
+{
+    str string[512];
+    snprintf(string, 512, "%s", contents[content_index]);
+    return *string;
 }
 
 bool check_is_directory(str *content)
@@ -82,7 +94,10 @@ bool check_is_directory(str *content)
 void input_listen_navigate(u16 content_index)
 {
     if (check_is_directory(contents[content_index]))
+    {
+        snprintf(dir_next_name, 512, "%s", contents[content_index]);
         printf("cd: %s\n", contents[content_index]);
+    }
     else
         printf("cannot navigate to '%s', not a directory\n", contents[content_index]);
 }
@@ -150,7 +165,7 @@ void input_listen()
 
     if (IsKeyPressed(KEY_E))
     {
-        update_path();
+        update_path(untokenize_contents(contents[content_index]));
         printf("--------------------------------------------------------------------------------\n");
         printf("     path:  %s\nnext path:  %s\n", path, path_next);
         printf("--------------------------------------------------------------------------------\n");
