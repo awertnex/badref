@@ -23,7 +23,7 @@ u8 running = 1;
 
 str path[264];
 str path_next[264];
-str contents[264][264];
+str contents[264][512];
 u16 content_index = 0;
 u16 file_count = 0;
 DIR *dir;
@@ -69,7 +69,7 @@ void tokenize_contents(u16 content_index, u8 *type)
 
 bool check_is_directory(str *content)
 {
-    for (u16 i = 0; i < 263 && content[i]; ++i)
+    for (u16 i = 0; i < 511 && content[i]; ++i)
     {
         if (!(strncmp(&content[i], "{.dir}", 7)))
         {
@@ -127,6 +127,21 @@ void input_listen()
         content_index = 6;
         input_listen_navigate(content_index);
     }
+    if (IsKeyPressed(KEY_SEVEN))
+    {
+        content_index = 7;
+        input_listen_navigate(content_index);
+    }
+    if (IsKeyPressed(KEY_EIGHT))
+    {
+        content_index = 8;
+        input_listen_navigate(content_index);
+    }
+    if (IsKeyPressed(KEY_NINE))
+    {
+        content_index = 9;
+        input_listen_navigate(content_index);
+    }
 
     if (IsKeyPressed(KEY_P))
     {
@@ -153,7 +168,7 @@ char parse_file_type(u8 *type)
 void init_dir()
 {
 	file_count = 0;
-    snprintf(path, 240, "%s", drnt->d_name);
+    snprintf(path, strlen(path), "%s", drnt->d_name);
 	dir = opendir("/");
 	for (u16 i = 0; i < 264 && contents[i][0] != 0; ++i)
 		memset(contents[i], 0, 264);
@@ -169,7 +184,7 @@ void init_dir()
 	}
 
 	closedir(dir);
-    for (u16 i = 0; i < 8 && contents[i][0] != 0; ++i)
+    for (u16 i = 0; i < 10 && contents[i][0] != 0; ++i)
         printf("%s\n", contents[i]);
     printf("--------------------------------------------------------------------------------\n");
 }
