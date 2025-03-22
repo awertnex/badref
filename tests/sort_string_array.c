@@ -14,7 +14,7 @@
 #include "../h/dir.h"
 #include "../logic.c"
 
-str contents[2048][1024] =
+str contents[CONTENT_ARRAY_SIZE][CONTENT_NAME_LENGTH_MAX] =
 {
 	"cewfee",
 	"abraham",
@@ -32,28 +32,29 @@ str contents[2048][1024] =
 void sort_str_arr();
 int main(void)
 {
-	for (u16 i = 0; i < 2047 && contents[i][0]; ++i)
+	for (u16 i = 0; i < CONTENT_ARRAY_SIZE && contents[i][0]; ++i)
 		printf("%s\n", contents[i]);
 	putchar('\n');
 	sort_str_arr();
 	//swap_strings(contents[0], contents[1]);
 	
-	for (u16 i = 0; i < 2047 && contents[i][0]; ++i)
+	for (u16 i = 0; i < CONTENT_ARRAY_SIZE && contents[i][0]; ++i)
 		printf("%s\n", contents[i]);
 	return 0;
 }
 
+//TODO: sort the last 2 strings as well
 void sort_str_arr()
 {
-	for (u16 i = 0; i < 2047 && contents[i + 1]; ++i)
+	for (u16 i = 0; i < CONTENT_ARRAY_SIZE - 1 && contents[i + 1]; ++i)
 	{
-		for (u16 j = 0; j < 1023 && contents[j][0] && contents[j + 1][0]; ++j)
+		for (u16 j = 0; j < CONTENT_ARRAY_SIZE - 1 && contents[j][0] && contents[j + 1][0]; ++j)
 		{
 			if (tolower(contents[j][0]) > tolower(contents[j + 1][0]))
 				swap_strings(contents[j], contents[j + 1]);
 
 			if (tolower(contents[j][0]) == tolower(contents[j + 1][0]))
-				for (u16 k = 1; k < 1023 && contents[i][k] && contents[i + 1][k]; ++k)
+				for (u16 k = 1; k < CONTENT_NAME_LENGTH_MIN && contents[i][k] && contents[i + 1][k]; ++k)
 				{
 					if (tolower(contents[j][k]) > tolower(contents[j + 1][k]))
 					{

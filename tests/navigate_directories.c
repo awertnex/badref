@@ -79,6 +79,7 @@ str untokenize_contents(u16 content_index)
     return *string;
 }
 
+//TODO: check if symlink leads to a directory
 bool check_is_directory(str *content)
 {
     for (u16 i = 0; i < 511 && content[i]; ++i)
@@ -96,7 +97,7 @@ void input_listen_navigate(u16 content_index)
     if (check_is_directory(contents[content_index]))
     {
         snprintf(dir_next_name, 512, "%s", contents[content_index]);
-        printf("cd: %s\n", contents[content_index]);
+        printf("cd: %s\n", dir_next_name);
     }
     else
         printf("cannot navigate to '%s', not a directory\n", contents[content_index]);
@@ -165,6 +166,7 @@ void input_listen()
 
     if (IsKeyPressed(KEY_E))
     {
+        //TODO: fix segfault
         update_path(untokenize_contents(contents[content_index]));
         printf("--------------------------------------------------------------------------------\n");
         printf("     path:  %s\nnext path:  %s\n", path, path_next);
@@ -184,7 +186,8 @@ void init_dir()
 {
 	file_count = 0;
 	dir = opendir("/");
-    snprintf(path, 512, "/");
+    //TODO: shorten path name to absolute path name
+    snprintf(path, 512, "/var/../log/../log/./");
 	for (u16 i = 0; i < 264 && contents[i][0] != 0; ++i)
 		memset(contents[i], 0, 264);
 

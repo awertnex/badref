@@ -10,9 +10,9 @@
 #include "logic.c"
 
 // ---- variables --------------------------------------------------------------
-str path[4096];
-str path_next[4096];
-str contents[2048][1024];
+str path[PATH_LENGTH];
+str path_next[PATH_LENGTH];
+str contents[CONTENT_ARRAY_SIZE][CONTENT_NAME_LENGTH_MAX];
 u16 content_index = 0;
 u16 file_count = 0;
 DIR *dir;
@@ -20,22 +20,26 @@ struct dirent *drnt;
 
 void init_path()
 {
-	snprintf(path, 4096, "%s/", getenv("HOME"));
+	snprintf(path, PATH_LENGTH, "%s/", getenv("HOME"));
 }
 
 void parse_path()
 {
 	file_count = 0;
 	dir = opendir(getenv("HOME"));
-	for (u16 i = 0; i < 2048 && contents[i][0] != 0; ++i)
-		memset(contents[i], 0, 1024);
+	for (u16 i = 0; i < CONTENT_ARRAY_SIZE && contents[i][0] != 0; ++i)
+		memset(contents[i], 0, CONTENT_NAME_LENGTH_MAX);
 
 	if (dir)
 	{
 		state |= STATE_CONTENTS_AVAILABLE;
 		while ((drnt = readdir(dir)) != NULL)
 		{
-			snprintf(contents[file_count], 1024, "%s%c", drnt->d_name, parse_file_type(&drnt->d_type));
+			snprintf(
+                    contents[file_count],
+                    CONTENT_NAME_LENGTH_MAX,
+                    "%s%c",
+                    drnt->d_name, parse_file_type(&drnt->d_type));
 			++file_count;
 		}
 	}
@@ -48,14 +52,14 @@ void parse_path()
 
 void update_path(str *content)
 {
-	memset(path_next, 0, strlen(path_next));
-	snprintf(path_next, 4096, "%s", path);
-	strncat(path_next, content, 1024);
+	memset(path_next, 0, PATH_LENGTH);
+	snprintf(path_next, PATH_LENGTH, "%s", path);
+	strncat(path_next, content, CONTENT_NAME_LENGTH_MAX);
 
 	dir = opendir(path_next);
 	if (dir)
 	{
-		snprintf(path, 4096, "%s", path_next);
+		snprintf(path, PATH_LENGTH, "%s", path_next);
 		closedir(dir);
 	}
 	printf("path: %s\ncontents: %s\n", path, content); /*temp*/
