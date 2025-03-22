@@ -21,8 +21,8 @@ _section_main ==================================================================
 // ---- variables --------------------------------------------------------------
 u8 running = 1;
 
-str path[264];
-str path_next[264];
+str path[512];
+str path_next[512];
 str contents[264][512];
 u16 content_index = 0;
 u16 file_count = 0;
@@ -152,7 +152,7 @@ void input_listen()
     {
         update_path();
         printf("--------------------------------------------------------------------------------\n");
-        printf("path:       %s\nnext path:  %s\n", path, path_next);
+        printf("     path:  %s\nnext path:  %s\n", path, path_next);
         printf("--------------------------------------------------------------------------------\n");
     }
 }
@@ -168,8 +168,8 @@ char parse_file_type(u8 *type)
 void init_dir()
 {
 	file_count = 0;
-    snprintf(path, strlen(path), "%s", drnt->d_name);
 	dir = opendir("/");
+    snprintf(path, 512, "/");
 	for (u16 i = 0; i < 264 && contents[i][0] != 0; ++i)
 		memset(contents[i], 0, 264);
 
@@ -184,7 +184,7 @@ void init_dir()
 	}
 
 	closedir(dir);
-    for (u16 i = 0; i < 10 && contents[i][0] != 0; ++i)
+    for (u16 i = 0; i < 11 && contents[i][0] != 0; ++i)
         printf("%s\n", contents[i]);
     printf("--------------------------------------------------------------------------------\n");
 }
