@@ -8,7 +8,7 @@ _section_logic =================================================================
  * [ ] evaluate layers under cursor and assign highest layer to cursor
  * [ ] fix final list item hover dimensions
  * [ ] implement scrolling
- * [x] navigate into and out of directories (Mar.18.2025)
+ * [x] navigate into and out of directories (18 Mar 2025)
  * [ ] display file info: name, extention, audio length, versions available
  * [ ] do anti-aliasing
  */
