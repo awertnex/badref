@@ -89,7 +89,7 @@ void free_gui();
 void draw_list_items(BadPaneGrid *badPaneGrid, BadPane *parentPane, BadVertex *badVertex);
 void draw_text(Font font, const str *str, v2i16 pos, f32 font_size, f32 spacing, Color tint, v2u8 center);
 float get_str_width(Font font, const str *str, f32 font_size, f32 spacing);
-bool detect_cursor_overlap(v2i16 tl, v2i16 br, u8 lyr, u8 *button_state);
+b8 detect_cursor_overlap(v2i16 tl, v2i16 br, u8 lyr, u8 *button_state);
 void evaluate_cursor_layer(u8 lyr);
 
 #define GUI_H

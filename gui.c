@@ -99,16 +99,16 @@ void update_gui()
 	pane_outliner.scl =
 		(v2i16){
 			320,
-		ren_scl.y - ((pane_playback.scl.y + MARGIN)*(bool)(state & STATE_PANE_PLAYBACK))
+		ren_scl.y - ((pane_playback.scl.y + MARGIN)*(b8)(state & STATE_PANE_PLAYBACK))
 		};
 	pane_playlist.pos =
 		(v2i16){
-			(pane_outliner.scl.x + MARGIN)*(bool)(state & STATE_PANE_OUTLINER), 0
+			(pane_outliner.scl.x + MARGIN)*(b8)(state & STATE_PANE_OUTLINER), 0
 		};
 	pane_playlist.scl =
 		(v2i16){
-			ren_scl.x - (pane_outliner.scl.x + MARGIN)*(bool)(state & STATE_PANE_OUTLINER),
-			ren_scl.y - (pane_playback.scl.y + MARGIN)*(bool)(state & STATE_PANE_PLAYBACK)
+			ren_scl.x - (pane_outliner.scl.x + MARGIN)*(b8)(state & STATE_PANE_OUTLINER),
+			ren_scl.y - (pane_playback.scl.y + MARGIN)*(b8)(state & STATE_PANE_PLAYBACK)
 		};
 	pane_playback.pos = (v2i16){0, ren_scl.y - pane_playback.scl.y};
 	pane_playback.scl = (v2i16){ren_scl.x, 80};
@@ -287,7 +287,7 @@ void draw_list_items(BadPaneGrid *badPaneGrid, BadPane *parentPane, BadVertex *b
 			DrawRectangleV(
 					(Vector2){
 					badVertex->tl.x,
-					badVertex->tl.y + ((badPaneGrid->unit.y + badPaneGrid->spacing)*i*(bool)i)},
+					badVertex->tl.y + ((badPaneGrid->unit.y + badPaneGrid->spacing)*i*(b8)i)},
 					(Vector2){
 					badPaneGrid->unit.x,
 					badPaneGrid->unit.y - (j + badPaneGrid->unit.y - badVertex->br.y)},
@@ -297,7 +297,7 @@ void draw_list_items(BadPaneGrid *badPaneGrid, BadPane *parentPane, BadVertex *b
 		DrawRectangleV(
 				(Vector2){
 				badVertex->tl.x,
-				parentPane->pos.y + margin_item + ((badPaneGrid->unit.y + badPaneGrid->spacing)*i*(bool)i)},
+				parentPane->pos.y + margin_item + ((badPaneGrid->unit.y + badPaneGrid->spacing)*i*(b8)i)},
 				(Vector2){
 				badPaneGrid->unit.x,
 				badPaneGrid->unit.y},
@@ -393,7 +393,7 @@ float get_str_width(Font font, const str *str, f32 font_size, f32 spacing)
 	return result + 4;
 }
 
-bool detect_cursor_overlap(v2i16 tl, v2i16 br, u8 lyr, u8 *button_state)
+b8 detect_cursor_overlap(v2i16 tl, v2i16 br, u8 lyr, u8 *button_state)
 {
 	if (cursor.x > tl.x && cursor.x < br.x && cursor.y > tl.y && cursor.y < br.y)
 	{
