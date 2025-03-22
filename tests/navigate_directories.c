@@ -186,11 +186,7 @@ void init_dir()
 {
 	file_count = 0;
 	dir = opendir("/");
-<<<<<<< HEAD
-    //TODO: shorten path name to absolute path nae
-=======
-    //TODO: shorten path name to absolute path nae
->>>>>>> development
+    //TODO: shorten path name to absolute path name
     snprintf(path, 512, "/var/../log/../log/./");
 	for (u16 i = 0; i < 264 && contents[i][0] != 0; ++i)
 		memset(contents[i], 0, 264);
