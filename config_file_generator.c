@@ -7,6 +7,7 @@
 
 // ---- variables --------------------------------------------------------------
 str config_path[32] = {0};
+str config_file_path[32] = {0};
 str config_tokens[32][84] =
 {
 	"@path_home:",
@@ -55,10 +56,11 @@ FILE *config;
 void init_config()
 {
 	snprintf(config_path, 31, "%s/.config/", getenv("HOME"));
+	snprintf(config_file_path, 31, "%s/.config/badref.conf", getenv("HOME"));
 
-	if (!(config = fopen("/home/lilya/.config/badref.conf", "r")))
+	if (!(config = fopen(config_file_path, "r")))
 	{
-		config = fopen("/home/lilya/.config/badref.conf", "w");
+		config = fopen(config_file_path, "w");
 		for (u16 i = 0; i < 48 && config_tokens[i]; ++i)
 		{
 			fwrite(config_contents[i], strlen(config_contents[i]), 1, config);
