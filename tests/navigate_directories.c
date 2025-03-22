@@ -130,9 +130,7 @@ void input_listen()
 
     if (IsKeyPressed(KEY_P))
     {
-        for (u16 i = 0; i < 8 && contents[i][0] != 0; ++i)
-            printf("%s\n", contents[i]);
-        printf("--------------------------------------------------------------------------------\n");
+        printf("--------------------------------------------------------------------------------\n%s\n", path);
     }
 
     if (IsKeyPressed(KEY_E))
@@ -155,6 +153,7 @@ char parse_file_type(u8 *type)
 void init_dir()
 {
 	file_count = 0;
+    snprintf(path, 240, "%s", drnt->d_name);
 	dir = opendir("/");
 	for (u16 i = 0; i < 264 && contents[i][0] != 0; ++i)
 		memset(contents[i], 0, 264);
