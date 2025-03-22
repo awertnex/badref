@@ -1,3 +1,5 @@
+// badref - v0.1.1 - Domain - https://github.com/awertnex/badref
+
 #ifndef BAD_REFERENCER_H
 
 #include <types.h>
