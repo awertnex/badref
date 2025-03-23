@@ -1,19 +1,20 @@
 /* ==== _section table =========================================================
 _section_testing ===============================================================
-_section_setup =================================================================
 _section_main ==================================================================
  */
 
 /* TASKS:    [!]: done!    [x]: deleted
  * [!] tokenize file info and display alongside contents (e.g. (file or dir), file format) (21 Mar 2025)
  * [!] print whether chosen content is a file or a directory (21 Mar 2025)
- * [ ] navigate to directories and refresh path[] and contents[][]
+ * [!] navigate to directories and refresh path[] and contents[][] (23 Mar 2025)
+ * [ ] navigate to symlinks that lead to directories
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
+#include <sys/stat.h>
 
 #include <raylib.h>
 
@@ -22,75 +23,91 @@ _section_main ==================================================================
 // ---- variables --------------------------------------------------------------
 u8 running = 1;
 
-str path[PATH_MAX];
-str contents[264][NAME_MAX];
+str path[PATH_MAX] = {0};
+str contents[264][NAME_MAX] = {0};
 u16 content_index = 0;
 u16 file_count = 0;
-str dir_next_name[NAME_MAX];
 DIR *dir;
 struct dirent *drnt;
 
 // ---- signatures -------------------------------------------------------------
-void init_gui();
-void update_gui();
-void update_path(str content[NAME_MAX]);
-bool check_is_directory(str *content);
-void input_listen_navigate(u16 content_index);
+void add_path_slash();
+void get_path_absolute(str content[NAME_MAX]);
+void open_directory(u16 content_index);
+void load_path();
 void input_listen();
 char parse_file_type(u8 *type);
-void init_dir();
-
-
-void init_gui()
-{
-	InitWindow(420, 420, "badref");
-	SetWindowState(FLAG_BORDERLESS_WINDOWED_MODE);
-    SetWindowSize(420, 420);
-    SetWindowPosition((1920/2) - 210, (1080/2) - 210);
-}
-
-void update_gui()
-{
-    BeginDrawing();
-    ClearBackground(DARKGRAY);
-    EndDrawing();
-}
 
 // ==== _section_testing =======================================================
-void update_path(str content[NAME_MAX])
+void add_path_slash()
 {
-    str path_relative[PATH_MAX];
-    str path_absolute[PATH_MAX];
-    snprintf(path_relative, PATH_MAX, "%s%s", path, content);
-
-    if (realpath(path_relative, path_absolute) == NULL)
-        printf("REALPATH: cannot find file with name[%s]\n", path);
-    else
-        snprintf(path, PATH_MAX, "%s", path_absolute);
-}
-
-//TODO: check if symlink leads to a directory
-bool check_is_directory(str *content)
-{
-    for (u16 i = 0; i < 511 && content[i]; ++i)
-    {
-        if (!(strncmp(&content[i], "{.dir}", 7)))
+    //TODO: make it work
+    for (u16 i = 0; i < PATH_MAX; ++i)
+        if (!(path[i + 1]) && path[i] != '/')
         {
-            return true;
+            path[i + 1] = '/';
+            break;
         }
-    }
-    return false;
 }
 
-void input_listen_navigate(u16 content_index)
+void get_path_absolute(str content[NAME_MAX])
 {
-    if (check_is_directory(contents[content_index]))
+    add_path_slash();
+
+    str path_relative[PATH_MAX] = {0};
+    str *path_absolute;
+
+    snprintf(path_relative, PATH_MAX, "%s%s", path, content);
+    add_path_slash();
+    path_absolute = realpath(path_relative, NULL);
+    if (!path_absolute)
     {
-        snprintf(dir_next_name, NAME_MAX, "%s", contents[content_index]);
-        printf("dir-next name: %s\n", dir_next_name);
+        free(path_absolute);
+        return;
     }
-    else
-        printf("cannot navigate to '%s', not a directory\n", contents[content_index]);
+    add_path_slash();
+    snprintf(path, PATH_MAX, "%s", path_absolute);
+    free(path_absolute);
+}
+
+void open_directory(u16 content_index)
+{
+    str path_next[PATH_MAX] = {0};
+    snprintf(path_next, PATH_MAX, "%s%s", path, contents[content_index]);
+
+    struct stat buf;
+    stat(path_next, &buf);
+
+    if (!(S_ISREG(buf.st_mode)))
+    {
+        printf("it's working\n"); //temp
+        snprintf(path, PATH_MAX, "%s", path_next);
+        get_path_absolute(contents[content_index]);
+        load_path();
+    }
+    else printf("-- ERROR: '%s' is not a directory\n", contents[content_index]);
+}
+
+void load_path()
+{
+    dir = opendir(path);
+    if (dir)
+    {
+        file_count = 0;
+        for (u16 i = 0; i < 264 /*TODO: FILES_MAX*/ && contents[i][0]; ++i)
+            memset(contents[i], 0, NAME_MAX);
+
+        while ((drnt = readdir(dir)))
+        {
+            snprintf(contents[file_count], NAME_MAX, "%s%c", drnt->d_name, parse_file_type(&drnt->d_type));
+            ++file_count;
+        }
+
+        closedir(dir);
+        return;
+    }
+
+    printf("notapath\n"); //temp
 }
 
 void input_listen()
@@ -101,70 +118,70 @@ void input_listen()
     if (IsKeyPressed(KEY_ZERO))
     {
         content_index = 0;
-        input_listen_navigate(content_index);
+        open_directory(content_index);
     }
     if (IsKeyPressed(KEY_ONE))
     {
         content_index = 1;
-        input_listen_navigate(content_index);
+        open_directory(content_index);
     }
     if (IsKeyPressed(KEY_TWO))
     {
         content_index = 2;
-        input_listen_navigate(content_index);
+        open_directory(content_index);
     }
     if (IsKeyPressed(KEY_THREE))
     {
         content_index = 3;
-        input_listen_navigate(content_index);
+        open_directory(content_index);
     }
     if (IsKeyPressed(KEY_FOUR))
     {
         content_index = 4;
-        input_listen_navigate(content_index);
+        open_directory(content_index);
     }
     if (IsKeyPressed(KEY_FIVE))
     {
         content_index = 5;
-        input_listen_navigate(content_index);
+        open_directory(content_index);
     }
     if (IsKeyPressed(KEY_SIX))
     {
         content_index = 6;
-        input_listen_navigate(content_index);
+        open_directory(content_index);
     }
     if (IsKeyPressed(KEY_SEVEN))
     {
         content_index = 7;
-        input_listen_navigate(content_index);
+        open_directory(content_index);
     }
     if (IsKeyPressed(KEY_EIGHT))
     {
         content_index = 8;
-        input_listen_navigate(content_index);
+        open_directory(content_index);
     }
     if (IsKeyPressed(KEY_NINE))
     {
         content_index = 9;
-        input_listen_navigate(content_index);
+        open_directory(content_index);
+    }
+
+    if (IsKeyPressed(KEY_C))
+    {
+        for (u16 i = 0; i < 11 && contents[i][0] != 0; ++i)
+            printf("%s\n", contents[i]);
+        printf("--------------------------------------------------------------------------------\n");
     }
 
     if (IsKeyPressed(KEY_P))
     {
-        printf("--------------------------------------------------------------------------------\n%s\n", path);
+        printf("%s\n", path);
     }
 
-    if (IsKeyPressed(KEY_E))
-    {
-        update_path(dir_next_name);
-
-        printf("--------------------------------------------------------------------------------\n");
-        printf("     path:  %s\nnext path:  %s\n", path, dir_next_name);
-        printf("--------------------------------------------------------------------------------\n");
-    }
+    if (IsKeyPressed(KEY_R))
+        load_path();
 }
 
-// ==== _section_setup =========================================================
 char parse_file_type(u8 *type)
 {
 	if (*type == 4)
@@ -172,42 +189,26 @@ char parse_file_type(u8 *type)
 	return 0;
 }
 
-
-void init_dir()
-{
-	file_count = 0;
-	dir = opendir("/");
-    //TODO: shorten path name to absolute path name
-    snprintf(path, 512, "/");
-	for (u16 i = 0; i < 264 && contents[i][0] != 0; ++i)
-		memset(contents[i], 0, 264);
-
-	if (dir)
-	{
-		while ((drnt = readdir(dir)) != NULL)
-		{
-			snprintf(contents[file_count], 264, "%s%c", drnt->d_name, parse_file_type(&drnt->d_type));
-            tokenize_contents(file_count, &drnt->d_type);
-			++file_count;
-		}
-	}
-
-	closedir(dir);
-    for (u16 i = 0; i < 11 && contents[i][0] != 0; ++i)
-        printf("%s\n", contents[i]);
-    printf("--------------------------------------------------------------------------------\n");
-}
-
 // ==== _section_main ==========================================================
 int main(void)
 {
-    init_gui();
-    init_dir();
+    InitWindow(420, 420, "badref");
+	SetWindowState(FLAG_BORDERLESS_WINDOWED_MODE);
+    SetWindowSize(420, 420);
+    SetWindowPosition((1920/2) - 210, (1080/2) - 210);
+
+    snprintf(path, PATH_MAX, "/var/log/../cache/..");
+    get_path_absolute("");
+    printf("%s\n", path);
+    load_path();
 
     while (running)
     {
         input_listen();
-        update_gui();
+
+        BeginDrawing();
+        ClearBackground(DARKGRAY);
+        EndDrawing();
     }
     return 0;
 }
