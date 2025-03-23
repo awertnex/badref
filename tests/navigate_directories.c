@@ -11,6 +11,7 @@ _section_main ==================================================================
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
 
@@ -21,21 +22,18 @@ _section_main ==================================================================
 // ---- variables --------------------------------------------------------------
 u8 running = 1;
 
-str path[512];
-str path_next[512];
-str contents[264][512];
-str dir_next_name[512];
+str path[PATH_MAX];
+str contents[264][NAME_MAX];
 u16 content_index = 0;
 u16 file_count = 0;
+str dir_next_name[NAME_MAX];
 DIR *dir;
 struct dirent *drnt;
 
 // ---- signatures -------------------------------------------------------------
 void init_gui();
 void update_gui();
-void update_path(str *content);
-void tokenize_contents(u16 content_index, u8 *type);
-str untokenize_contents(u16 content_index);
+void update_path(str content[NAME_MAX]);
 bool check_is_directory(str *content);
 void input_listen_navigate(u16 content_index);
 void input_listen();
@@ -59,24 +57,16 @@ void update_gui()
 }
 
 // ==== _section_testing =======================================================
-void update_path(str *content)
+void update_path(str content[NAME_MAX])
 {
-    snprintf(path_next, 512, "%s", path);
-    strncat(path_next, content, 128);
-    snprintf(path, 512, "%s", path_next);
-}
+    str path_relative[PATH_MAX];
+    str path_absolute[PATH_MAX];
+    snprintf(path_relative, PATH_MAX, "%s%s", path, content);
 
-void tokenize_contents(u16 content_index, u8 *type)
-{
-    if (*type == 4)
-        strncat(contents[content_index], "{.dir}", 7);
-}
-
-str untokenize_contents(u16 content_index)
-{
-    str string[512];
-    snprintf(string, 512, "%s", contents[content_index]);
-    return *string;
+    if (realpath(path_relative, path_absolute) == NULL)
+        printf("REALPATH: cannot find file with name[%s]\n", path);
+    else
+        snprintf(path, PATH_MAX, "%s", path_absolute);
 }
 
 //TODO: check if symlink leads to a directory
@@ -96,8 +86,8 @@ void input_listen_navigate(u16 content_index)
 {
     if (check_is_directory(contents[content_index]))
     {
-        snprintf(dir_next_name, 512, "%s", contents[content_index]);
-        printf("cd: %s\n", dir_next_name);
+        snprintf(dir_next_name, NAME_MAX, "%s", contents[content_index]);
+        printf("dir-next name: %s\n", dir_next_name);
     }
     else
         printf("cannot navigate to '%s', not a directory\n", contents[content_index]);
@@ -166,10 +156,10 @@ void input_listen()
 
     if (IsKeyPressed(KEY_E))
     {
-        //TODO: fix segfault
-        update_path(untokenize_contents(contents[content_index]));
+        update_path(dir_next_name);
+
         printf("--------------------------------------------------------------------------------\n");
-        printf("     path:  %s\nnext path:  %s\n", path, path_next);
+        printf("     path:  %s\nnext path:  %s\n", path, dir_next_name);
         printf("--------------------------------------------------------------------------------\n");
     }
 }
@@ -182,12 +172,13 @@ char parse_file_type(u8 *type)
 	return 0;
 }
 
+
 void init_dir()
 {
 	file_count = 0;
 	dir = opendir("/");
     //TODO: shorten path name to absolute path name
-    snprintf(path, 512, "/var/../log/../log/./");
+    snprintf(path, 512, "/");
 	for (u16 i = 0; i < 264 && contents[i][0] != 0; ++i)
 		memset(contents[i], 0, 264);
 
