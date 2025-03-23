@@ -1,22 +1,21 @@
 #ifndef DIR_H
 
+#include <limits.h>
 #include <types.h>
 
-#define PATH_LENGTH             2048
-#define CONTENT_ARRAY_SIZE      2048
-#define CONTENT_NAME_LENGTH_MIN 256
-#define CONTENT_NAME_LENGTH_MAX 264
+#define FILES_MAX   2048
+#define NAME_MIN    256
 
 // ---- variables --------------------------------------------------------------
-extern str path[PATH_LENGTH];
-extern str contents[CONTENT_ARRAY_SIZE][CONTENT_NAME_LENGTH_MAX];
+extern str path[PATH_MAX];
+extern str contents[FILES_MAX][NAME_MAX];
 extern u16 content_index;
 extern u16 file_count;
 
 // ---- signatures -------------------------------------------------------------
 void init_path();
 void parse_path();
-void update_path(str *contents);
+void update_path(str content[NAME_MAX]);
 char parse_file_type(u8 *type);
 
 #define DIR_H
