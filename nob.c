@@ -5,20 +5,11 @@
 #include "shared.h"
 
 const char *test_names[] = {
-    "minimal_log_level",
-    "nob_sv_end_with",
-    "set_get_current_dir",
-    "cmd_redirect",
-#ifdef _WIN32
-    "win32_error",
-#endif //_WIN32
-    "read_entire_dir",
-    "da_resize",
-    "da_last",
-    "da_remove_unordered",
-    "da_append",
-    "sb_appendf",
+    "navigate_directories",
+    "sort_string_array",
+    "sort_string_array_2",
 };
+
 #define test_names_count ARRAY_LEN(test_names)
 
 bool build_and_run_test(Cmd *cmd, const char *test_name)
