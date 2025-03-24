@@ -15,12 +15,13 @@ Additional Features:
 - - - -
 ## Building badref
 ### build tool: [nob.h](https://github.com/tsoding/nob.h) by [Tsoding](https://github.com/tsoding)
+Before building, I encourage reading the usage of the tool at the nob.h repo.
 
 #### Linux - Debian-Based:
 
 Using a terminal:
 ```
-cc nob.c -o nob &&
+cc -o nob nob.c &&
 ./nob
 ```
 

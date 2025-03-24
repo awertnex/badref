@@ -33,8 +33,10 @@ int main(void)
 	camera.zoom = 1;
 
 	init_config();
+
     snprintf(files[0], 22, "/home/lilya/Desktop/"); //temp
-    open_directory(0);          // temp
+    open_directory(0);                              //temp
+
 	init_gui();
 	InitAudioDevice();
 
