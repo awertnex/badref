@@ -1,12 +1,11 @@
-// badref - v0.1.1 - Domain - https://github.com/awertnex/badref
+// badref - v0.2.1 - Domain - https://github.com/awertnex/badref
 
-#ifndef BAD_REFERENCER_H
+#ifndef BADREF_H
 
 #include <defines.h>
 
 // ---- variables --------------------------------------------------------------
 extern u16 state;
-extern u8 ModeDebug;
 
 enum BadStates
 {
@@ -16,11 +15,10 @@ enum BadStates
 	STATE_PANE_OUTLINER =		0x008,
 	STATE_PANE_PLAYBACK =		0x010,
 	STATE_CONTENTS_AVAILABLE =	0x020,
-
 }; /* BadStates */
 
 // ---- signatures -------------------------------------------------------------
 void listen_input();
 
-#define BAD_REFERENCER_H
+#define BADREF_H
 #endif
