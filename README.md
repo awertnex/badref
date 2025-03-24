@@ -1,13 +1,32 @@
 # badref  -  v0.1.1
-badref, a Music Referencer, but Written Kinda Badly.
-The Sole Purpose is Immediate Switching Between Different Versions of the Same Audio.
+A music referencer, but written kinda badly.
+The sole purpose is immediate switching between different versions of the same audio.
 
 
 Main Features:
-- Loading All Audio Files Named as "[test 000] Artist - Song Name" and Displaying Them as One Audio File in the Playlist.
-- Displaying the Versions Loaded Alongside the Loaded File, Allowing Version Switching During Playback.
-- Placing markers and naming them and looping them, or reading markers if rendered in from a DAW.
+- Loading all audio files named as "[test 000] artist - song name" and displaying them as one audio file in the playlist.
+- Displaying the versions loaded alongside the loaded file, allowing version switching during playback.
+- Placing markers and naming them and looping them, or reading markers if rendered in from a daw.
 
 Additional Features:
-- Adding Comments and TO-DO Checkboxes to an Autio File or a Specific Version.
-- Keeping History of TO-DO Completion And Extracting it to a Text File.
+- Adding comments and to-do checkboxes to an autio file or a specific version.
+- Keeping history of to-do completion and extracting it to a text file.
+
+- - - -
+## Building badref
+
+### Linux - Debian-Based
+
+Using a terminal:
+```
+cc nob.c -o nob &&
+./nob
+```
+
+Then run badref with the command `./badref`.
+Additionally, you could move the executable to your binaries directory with the command:
+```
+sudo mv badref /usr/local/bin/
+```
+
+and run it directly with the command `badref`.
