@@ -28,14 +28,10 @@ str files[FILES_MAX][NAME_MAX] =
 
 void sort_str_arr()
 {
-    u16 count = 0;
-    for (u16 i = 0; i < FILES_MAX && files[i][0]; ++i)
-        ++count;
-
-    for (u16 i = 0, smallest = 0; i < count; ++i)
+    for (u16 i = 0, smallest = 0; i < FILES_MAX && files[i][0]; ++i)
     {
         smallest = i;
-        for (u16 j = i + 1; j < count; ++j)
+        for (u16 j = i + 1; j < FILES_MAX && files[j][0]; ++j)
         {
             if (tolower(files[j][0]) < tolower(files[smallest][0]) && files[j][0] && files[smallest][0])
                 smallest = j;
@@ -53,7 +49,6 @@ void sort_str_arr()
 
         swap_strings(files[i], files[smallest]);
     }
-
 }
 
 int main(void)
