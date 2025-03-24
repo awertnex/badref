@@ -4,6 +4,7 @@
 #include <libgen.h>
 #include <string.h>
 #include <dirent.h>
+#include <sys/stat.h>
 
 #include "h/dir.h"
 #include "h/main.h"
@@ -11,9 +12,8 @@
 
 // ---- variables --------------------------------------------------------------
 str path[PATH_MAX];
-str path_next[PATH_MAX];
-str contents[FILES_MAX][NAME_MAX];
-u16 content_index = 0;
+str files[FILES_MAX][NAME_MAX];
+u16 file_index = 0;
 u16 file_count = 0;
 DIR *dir;
 struct dirent *drnt;
@@ -23,46 +23,61 @@ void init_path()
 	snprintf(path, PATH_MAX, "%s/", getenv("HOME"));
 }
 
-void parse_path()
+void get_path_absolute()
 {
-	file_count = 0;
-	dir = opendir(getenv("HOME"));
-	for (u16 i = 0; i < FILES_MAX && contents[i][0] != 0; ++i)
-		memset(contents[i], 0, NAME_MAX);
+    str path_relative[PATH_MAX] = {0};
+    str *path_absolute;
 
-	if (dir)
-	{
-		state |= STATE_CONTENTS_AVAILABLE;
-		while ((drnt = readdir(dir)) != NULL)
-		{
-			snprintf(
-                    contents[file_count],
-                    NAME_MAX,
-                    "%s%c",
-                    drnt->d_name, parse_file_type(&drnt->d_type));
-			++file_count;
-		}
-	}
+    snprintf(path_relative, PATH_MAX, "%s", path);
+    path_absolute = realpath(path_relative, NULL);
+    if (!path_absolute)
+    {
+        free(path_absolute);
+        return;
+    }
+    for (u16 i = 0; i < (PATH_MAX - 1); ++i)
+        if (path_absolute[i + 1] == 0 && path_absolute[i] != '/')
+        {
+            strncat(path_absolute, "/", 2);
+            break;
+        }
 
-	closedir(dir);
-	sort_string_array();
-	return;
-	state &= ~STATE_CONTENTS_AVAILABLE;
+    snprintf(path, PATH_MAX, "%s", path_absolute);
+    free(path_absolute);
 }
 
-void update_path(str *content)
+void open_directory(u16 file_index)
 {
-	memset(path_next, 0, PATH_MAX);
-	snprintf(path_next, PATH_MAX, "%s", path);
-	strncat(path_next, content, NAME_MAX);
+    get_path_absolute();
 
-	dir = opendir(path_next);
-	if (dir)
-	{
-		snprintf(path, PATH_MAX, "%s", path_next);
-		closedir(dir);
-	}
-	printf("path: %s\ncontents: %s\n", path, content); /*temp*/
+    str path_next[PATH_MAX] = {0};
+    snprintf(path_next, PATH_MAX, "%s%s", path, files[file_index]);
+
+    struct stat buf;
+    stat(path_next, &buf);
+
+    if (S_ISDIR(buf.st_mode))
+    {
+        snprintf(path, PATH_MAX, "%s", path_next);
+        get_path_absolute();
+
+        dir = opendir(path);
+        if (dir)
+        {
+            file_count = 0;
+            for (u16 i = 0; i < 264 /*TODO: FILES_MAX*/ && files[i][0]; ++i)
+                memset(files[i], 0, NAME_MAX);
+
+            while ((drnt = readdir(dir)))
+            {
+                snprintf(files[file_count], NAME_MAX, "%s%c", drnt->d_name, parse_file_type(&drnt->d_type));
+                ++file_count;
+            }
+
+            closedir(dir);
+        }
+    }
+    else printf("-- ERROR: '%s' is not a directory\n", files[file_index]);
 }
 
 char parse_file_type(u8 *type)
@@ -76,23 +91,23 @@ char parse_file_type(u8 *type)
 void sort_string_array()
 {
 	u8 parse;
-	for (u16 i = 0; contents[i + 1] && parse; ++i, parse = 0)
+	for (u16 i = 0; files[i + 1] && parse; ++i, parse = 0)
 	{
-		for (u16 j = 0; j < 2047 && contents[j + 1][0]; ++j)
+		for (u16 j = 0; j < 2047 && files[j + 1][0]; ++j)
 		{
-			if (tolower(contents[j][0]) > tolower(contents[j + 1][0]))
+			if (tolower(files[j][0]) > tolower(files[j + 1][0]))
 			{
-				swap_strings(contents[j], contents[j + 1]);
+				swap_strings(files[j], files[j + 1]);
 				parse = 1;
 				continue;
 			}
 
-			if (tolower(contents[j][0]) == tolower(contents[j + 1][0]))
-				for (u16 k = 1; k < 1023 && (contents[i][k] || contents[i + 1][k]); ++k)
+			if (tolower(files[j][0]) == tolower(files[j + 1][0]))
+				for (u16 k = 1; k < 1023 && (files[i][k] || files[i + 1][k]); ++k)
 				{
-					if (tolower(contents[j][k]) > tolower(contents[j + 1][k]))
+					if (tolower(files[j][k]) > tolower(files[j + 1][k]))
 					{
-						swap_strings(contents[j], contents[j + 1]);
+						swap_strings(files[j], files[j + 1]);
 						parse = 1;
 						break;
 					}

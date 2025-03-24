@@ -33,9 +33,9 @@ int main(void)
 	camera.zoom = 1;
 
 	init_config();
+    snprintf(files[0], 2, "/"); //temp
+    open_directory(0);          // temp
 	init_gui();
-	init_path();
-	parse_path();
 	InitAudioDevice();
 
 	// ---- _section_main_loop -------------------------------------------------

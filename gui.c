@@ -168,8 +168,7 @@ void update_gui()
 				break;
 			if (pane_grid_outliner.button_states[i] == BUTTON_RELEASED)
 			{
-				update_path(contents[content_index]);
-				parse_path();
+                open_directory(file_index);
 				pane_grid_outliner.button_states[i] = BUTTON_LISTENING;
 				break;
 			}
@@ -269,7 +268,7 @@ void draw_list_items(BadPaneGrid *badPaneGrid, BadPane *parentPane, BadVertex *b
 			if (IsMouseButtonPressed(0))
 			{
 				badPaneGrid->button_states[i] = BUTTON_PRESSED;
-				content_index = i;
+				file_index = i;
 			}
 			if (IsMouseButtonReleased(0))
 			{
@@ -304,7 +303,7 @@ void draw_list_items(BadPaneGrid *badPaneGrid, BadPane *parentPane, BadVertex *b
 				color);
 		draw_text(
 				bad_fonts.term,
-				contents[i],
+				files[i],
 				(v2i16){
 				badVertex->tl.x + margin_item,
 				j + (badPaneGrid->unit.y/2)
