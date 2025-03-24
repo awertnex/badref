@@ -18,11 +18,6 @@ u16 file_count = 0;
 DIR *dir;
 struct dirent *drnt;
 
-void init_path()
-{
-	snprintf(path, PATH_MAX, "%s/", getenv("HOME"));
-}
-
 void get_path_absolute()
 {
     str path_relative[PATH_MAX] = {0};
@@ -73,6 +68,7 @@ void open_directory(u16 file_index)
                 snprintf(files[file_count], NAME_MAX, "%s%c", drnt->d_name, parse_file_type(&drnt->d_type));
                 ++file_count;
             }
+            sort_string_array();
 
             closedir(dir);
         }
@@ -86,33 +82,3 @@ char parse_file_type(u8 *type)
 		return '/';
 	return 0;
 }
-
-/*
-void sort_string_array()
-{
-	u8 parse;
-	for (u16 i = 0; files[i + 1] && parse; ++i, parse = 0)
-	{
-		for (u16 j = 0; j < 2047 && files[j + 1][0]; ++j)
-		{
-			if (tolower(files[j][0]) > tolower(files[j + 1][0]))
-			{
-				swap_strings(files[j], files[j + 1]);
-				parse = 1;
-				continue;
-			}
-
-			if (tolower(files[j][0]) == tolower(files[j + 1][0]))
-				for (u16 k = 1; k < 1023 && (files[i][k] || files[i + 1][k]); ++k)
-				{
-					if (tolower(files[j][k]) > tolower(files[j + 1][k]))
-					{
-						swap_strings(files[j], files[j + 1]);
-						parse = 1;
-						break;
-					}
-				}
-		}
-	}
-}
-*/
