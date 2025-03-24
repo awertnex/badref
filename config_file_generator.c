@@ -3,7 +3,7 @@
 #include <string.h>
 #include <dirent.h>
 
-#include <types.h>
+#include <defines.h>
 
 // ---- variables --------------------------------------------------------------
 str config_path[32] = {0};

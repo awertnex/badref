@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
-#include <types.h>
+#include <defines.h>
 
 #include "h/dir.h"
 

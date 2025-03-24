@@ -2,7 +2,7 @@
 
 #ifndef BAD_REFERENCER_H
 
-#include <types.h>
+#include <defines.h>
 
 // ---- variables --------------------------------------------------------------
 extern u16 state;

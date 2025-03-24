@@ -4,7 +4,7 @@
 
 #define VECTOR2_TYPES
 #define VECTOR4_TYPES
-#include <types.h>
+#include <defines.h>
 
 // ---- definitions ------------------------------------------------------------
 #define WIDTH 1280
@@ -48,6 +48,24 @@ typedef struct BadVertex
 	v2i16 tl, br;
 } BadVertex;
 
+typedef struct Images
+{
+    Image file_collapsed;
+    Image file_expanded;
+    Image file_loaded;
+    Image file_refresh;
+    Image file_settings;
+    Image file_usable;
+
+    Image playback_back;
+    Image playback_fwd;
+    Image playback_head;
+    Image playback_loop_off;
+    Image playback_loop_on;
+    Image playback_paused;
+    Image playback_playing;
+} Images;
+
 // ---- colors -----------------------------------------------------------------
 #define COL_BASE		color(0xFF, 0xFF, 0xFF, 0x36, 0xFF)
 #define COL_PANE		color(0xFF, 0xFF, 0xFF, 0x28, 0xFF)
@@ -81,6 +99,9 @@ extern BadVertex vertex_grid_outliner;
 extern BadVertex vertex_grid_playback;
 extern BadVertex vertex_grid_playlist;
 extern f32 margin_item;
+
+#define IMAGE_COUNT 32
+extern Image Img[IMAGE_COUNT];
 
 // ---- signatures -------------------------------------------------------------
 void init_gui();

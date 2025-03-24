@@ -1,7 +1,7 @@
 #ifndef DIR_H
 
 #include <limits.h>
-#include <types.h>
+#include <defines.h>
 
 #define FILES_MAX   2048
 #define NAME_MIN    256

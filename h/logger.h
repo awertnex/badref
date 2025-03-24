@@ -1,6 +1,6 @@
 #pragma once
 
-#include <types.h>
+#include <defines.h>
 
 #define LOG_WARN 1
 #define LOG_INFO 1

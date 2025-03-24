@@ -65,11 +65,55 @@ BadVertex vertex_grid_playback = {0};
 BadVertex vertex_grid_playlist = {0};
 f32 margin_item = 10;
 
+//TODO: load images
+Image Img[IMAGE_COUNT];
+u8 loaded_image_index[IMAGE_COUNT] = {0};
+str icon_paths[IMAGE_COUNT][PATH_MAX] =
+{
+    "icons/file_collapsed.jpg",
+    "icons/file_expanded.jpg",
+    "icons/file_loaded.jpg",
+    "icons/file_refresh.jpg",
+    "icons/file_settings.jpg",
+    "icons/file_usable.jpg",
+    "icons/playback_back.jpg",
+    "icons/playback_fwd.jpg",
+    "icons/playback_head.jpg",
+    "icons/playback_loop_off.jpg",
+    "icons/playback_loop_on.jpg",
+    "icons/playback_paused.jpg",
+    "icons/playback_playing.jpg",
+};
+enum Icons
+{
+    FILE_COLLAPSED =        0x00,
+    FILE_EXPANDED =         0x01,
+    FILE_LOADED =           0x02,
+    FILE_SETTINGS =         0x03,
+    FILE_REFRESH =          0x04,
+    FILE_USABLE =           0x05,
+    PLAYBACK_BACK =         0x06,
+    PLAYBACK_FWD =          0x07,
+    PLAYBACK_HEAD =         0x08,
+    PLAYBACK_LOOP_OFF =     0x09,
+    PLAYBACK_LOOP_ON =      0x0a,
+    PLAYBACK_PAUSED =       0x0b,
+    PLAYBACK_PLAYING =      0x0c,
+}; /* Icons */
+
 // =============================================================================
 // ==== _section_gui_setup =====================================================
 // =============================================================================
 void init_gui()
 {
+    for (u16 i = 0; i < IMAGE_COUNT; ++i)
+    {
+        Img[i] = LoadImage(icon_paths[i]);
+        if (IsImageReady(Img[i]))
+            loaded_image_index[i] = 1;
+
+    }
+
 	bad_fonts.regular = LoadFont("fonts/natural_mono_regular.ttf");
 	bad_fonts.bold = LoadFont("fonts/natural_mono_bold.ttf");
 	bad_fonts.term = LoadFont("fonts/terminal_f4.ttf");
@@ -195,9 +239,6 @@ void update_gui()
 			DrawCircleV((Vector2){vertex_grid_playback.br.x, vertex_grid_playback.br.y}, 1.5f, GREEN);
 		}
 	}
-	else
-	{
-	}
 
 	// ---- pane: playlist -----------------------------------------------------
 	DrawRectangleV(
@@ -224,9 +265,6 @@ void update_gui()
 				&vertex_grid_playlist);
 				*/
 	}
-	else
-	{
-	}
 	draw_text(
 			bad_fonts.term,
 			"Nothing to Display Here",
@@ -243,6 +281,10 @@ void free_gui()
 {
 	UnloadFont(bad_fonts.regular);
 	UnloadFont(bad_fonts.bold);
+
+    for (u16 i = 0; i < IMAGE_COUNT; ++i)
+        if (loaded_image_index[i])
+            UnloadImage(Img[i]);
 }
 
 // =============================================================================
