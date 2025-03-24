@@ -23,4 +23,4 @@ typedef enum LogLevel
 } LogLevel;
 
 b8 init_logging();
-void shutdown_logging();
+void close_logging();

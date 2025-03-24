@@ -2,8 +2,13 @@
 
 #include <raylib.h>
 
-#define VECTOR2_TYPES
-#define VECTOR4_TYPES
+#ifndef VECTOR2_TYPES
+    #define VECTOR2_TYPES
+#endif
+#ifndef VECTOR4_TYPES
+    #define VECTOR4_TYPES
+#endif
+
 #include <defines.h>
 
 // ---- definitions ------------------------------------------------------------

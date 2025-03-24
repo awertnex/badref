@@ -8,8 +8,16 @@ _section_main ==================================================================
 
 #include <raylib.h>
 
-#include "gui.c"
+#ifndef VECTOR2_TYPES
+    #define VECTOR2_TYPES
+#endif
+#ifndef VECTOR4_TYPES
+    #define VECTOR4_TYPES
+#endif
+
+#include "h/logger.h"
 #include "dir.c"
+#include "gui.c"
 #include "config_file_generator.c"
 #include "h/main.h"
 
@@ -39,7 +47,6 @@ int main(void)
     open_directory(0);                              //temp
 
 	init_gui();
-	InitAudioDevice();
 
 	// ---- _section_main_loop -------------------------------------------------
 	while (state & STATE_RUNNING)
@@ -55,13 +62,11 @@ int main(void)
 	}
 
 	// ---- _section_main_close ------------------------------------------------
-	CloseAudioDevice();
 	free_gui();
 	CloseWindow();
 	return 0;
 }
 
-// 
 void listen_input()
 {
 	if (IsKeyPressed(KEY_F3))
