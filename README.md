@@ -14,6 +14,10 @@ Additional Features:
 
 - - - -
 ## Building badref
+- build tool:
+    - nob.h
+    - at: https://github.com/tsoding/nob.h
+    - credit: tsoding
 
 #### Linux - Debian-Based:
 
