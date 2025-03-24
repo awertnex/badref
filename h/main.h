@@ -6,6 +6,7 @@
 
 // ---- variables --------------------------------------------------------------
 extern u16 state;
+extern u8 ModeDebug;
 
 enum BadStates
 {
