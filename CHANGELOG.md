@@ -1,0 +1,17 @@
+# changelog
+- - - -
+
+## v0.2.1
+- fixed array sorting, changed it from bubble-sort to selection-sort
+
+## v0.2.0
+    - added directory navigation
+
+## v0.1.1
+    - changed a few comments and naming conventions
+
+## v0.1.0
+    - basic gui setup, keyboard controls and button hover detection and
+      functionality, very clunky but it is there
+    - initial setup of basic algorithms like string parsing, sorting and bit
+      swapping
