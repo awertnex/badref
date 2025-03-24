@@ -7,7 +7,7 @@ _section_main ==================================================================
  * [!] tokenize file info and display alongside contents (e.g. (file or dir), file format) (21 Mar 2025)
  * [!] print whether chosen content is a file or a directory (21 Mar 2025)
  * [!] navigate to directories and refresh path[] and contents[][] (23 Mar 2025)
- * [ ] navigate to symlinks that lead to directories
+ * [!] navigate to symlinks that lead to directories (24 Mar 2025)
  */
 
 #include <stdio.h>
@@ -33,7 +33,6 @@ struct dirent *drnt;
 // ---- signatures -------------------------------------------------------------
 void get_path_absolute();
 void open_directory(u16 content_index);
-void load_path();
 void input_listen();
 char parse_file_type(u8 *type);
 
@@ -63,43 +62,36 @@ void get_path_absolute()
 
 void open_directory(u16 content_index)
 {
+    get_path_absolute();
+
     str path_next[PATH_MAX] = {0};
     snprintf(path_next, PATH_MAX, "%s%s", path, contents[content_index]);
-    get_path_absolute();
 
     struct stat buf;
     stat(path_next, &buf);
 
-    if (!(S_ISREG(buf.st_mode)))
+    if (S_ISDIR(buf.st_mode))
     {
-        printf("it's working\n"); //temp
         snprintf(path, PATH_MAX, "%s", path_next);
         get_path_absolute();
-        load_path();
+
+        dir = opendir(path);
+        if (dir)
+        {
+            file_count = 0;
+            for (u16 i = 0; i < 264 /*TODO: FILES_MAX*/ && contents[i][0]; ++i)
+                memset(contents[i], 0, NAME_MAX);
+
+            while ((drnt = readdir(dir)))
+            {
+                snprintf(contents[file_count], NAME_MAX, "%s%c", drnt->d_name, parse_file_type(&drnt->d_type));
+                ++file_count;
+            }
+
+            closedir(dir);
+        }
     }
     else printf("-- ERROR: '%s' is not a directory\n", contents[content_index]);
-}
-
-void load_path()
-{
-    dir = opendir(path);
-    if (dir)
-    {
-        file_count = 0;
-        for (u16 i = 0; i < 264 /*TODO: FILES_MAX*/ && contents[i][0]; ++i)
-            memset(contents[i], 0, NAME_MAX);
-
-        while ((drnt = readdir(dir)))
-        {
-            snprintf(contents[file_count], NAME_MAX, "%s%c", drnt->d_name, parse_file_type(&drnt->d_type));
-            ++file_count;
-        }
-
-        closedir(dir);
-        return;
-    }
-
-    printf("notapath\n"); //temp
 }
 
 void input_listen()
@@ -169,9 +161,6 @@ void input_listen()
     {
         printf("%s\n", path);
     }
-
-    if (IsKeyPressed(KEY_R))
-        load_path();
 }
 
 char parse_file_type(u8 *type)
@@ -189,9 +178,8 @@ int main(void)
     SetWindowSize(420, 420);
     SetWindowPosition((1920/2) - 210, (1080/2) - 210);
 
-    snprintf(path, PATH_MAX, "/var/log/../cache/..");
-    get_path_absolute();
-    load_path();
+    snprintf(path, PATH_MAX, "/var/log/../cache/../..");
+    open_directory(0);
 
     while (running)
     {
