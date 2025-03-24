@@ -42,7 +42,7 @@ void sort_str_arr()
                 swap_strings(files[j], files[j + 1]);
 
 			if (tolower(files[j][0]) == tolower(files[j + 1][0]))
-				for (u16 k = 1; k < NAME_MAX - 1 && files[i][k] && files[i + 1][k]; ++k)
+				for (u16 k = 1; k < NAME_MAX - 1 && files[i][k - 1] && files[i + 1][k - 1]; ++k)
 				{
 					if (tolower(files[j][k]) > tolower(files[j + 1][k]))
 					{
