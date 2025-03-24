@@ -3,6 +3,7 @@
  * [!] swap bits (Mar.19.2025)
  * [!] swap strings using swap_bits() (Mar.20.2025)
  * [!] sort string array (Mar.20.2025)
+ * [ ] make selection-sort or pigeonhole-sort
  */
 #include <stdio.h>
 #include <ctype.h>
@@ -14,7 +15,7 @@
 #include "../h/dir.h"
 #include "../logic.c"
 
-str contents[CONTENT_ARRAY_SIZE][CONTENT_NAME_LENGTH_MAX] =
+str files[FILES_MAX][NAME_MAX] =
 {
 	"cewfee",
 	"abraham",
@@ -27,41 +28,40 @@ str contents[CONTENT_ARRAY_SIZE][CONTENT_NAME_LENGTH_MAX] =
 	"zylofoan",
 	".Book",
 	"linux",
+    "zeez",
 };
-
-void sort_str_arr();
-int main(void)
-{
-	for (u16 i = 0; i < CONTENT_ARRAY_SIZE && contents[i][0]; ++i)
-		printf("%s\n", contents[i]);
-	putchar('\n');
-	sort_str_arr();
-	//swap_strings(contents[0], contents[1]);
-	
-	for (u16 i = 0; i < CONTENT_ARRAY_SIZE && contents[i][0]; ++i)
-		printf("%s\n", contents[i]);
-	return 0;
-}
 
 //TODO: sort the last 2 strings as well
 void sort_str_arr()
 {
-	for (u16 i = 0; i < CONTENT_ARRAY_SIZE - 1 && contents[i + 1]; ++i)
+	for (u16 i = 0; i < FILES_MAX - 1 && files[i + 1]; ++i)
 	{
-		for (u16 j = 0; j < CONTENT_ARRAY_SIZE - 1 && contents[j][0] && contents[j + 1][0]; ++j)
+		for (u16 j = 0; j < FILES_MAX - 1 && files[j][0] && files[j + 1][0]; ++j)
 		{
-			if (tolower(contents[j][0]) > tolower(contents[j + 1][0]))
-				swap_strings(contents[j], contents[j + 1]);
+			if (tolower(files[j][0]) > tolower(files[j + 1][0]))
+                swap_strings(files[j], files[j + 1]);
 
-			if (tolower(contents[j][0]) == tolower(contents[j + 1][0]))
-				for (u16 k = 1; k < CONTENT_NAME_LENGTH_MIN && contents[i][k] && contents[i + 1][k]; ++k)
+			if (tolower(files[j][0]) == tolower(files[j + 1][0]))
+				for (u16 k = 1; k < NAME_MAX - 1 && files[i][k] && files[i + 1][k]; ++k)
 				{
-					if (tolower(contents[j][k]) > tolower(contents[j + 1][k]))
+					if (tolower(files[j][k]) > tolower(files[j + 1][k]))
 					{
-						swap_strings(contents[j], contents[j + 1]);
+						swap_strings(files[j], files[j + 1]);
 						break;
 					}
 				}
 		}
 	}
+}
+
+int main(void)
+{
+	for (u16 i = 0; i < FILES_MAX && files[i][0]; ++i)
+		printf("%s\n", files[i]);
+	putchar('\n');
+	sort_str_arr();
+	
+	for (u16 i = 0; i < FILES_MAX && files[i][0]; ++i)
+		printf("%s\n", files[i]);
+	return 0;
 }
