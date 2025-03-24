@@ -15,7 +15,7 @@ Additional Features:
 - - - -
 ## Building badref
 
-### Linux - Debian-Based
+#### Linux - Debian-Based:
 
 Using a terminal:
 ```
@@ -23,8 +23,8 @@ cc nob.c -o nob &&
 ./nob
 ```
 
-Then run badref with the command `./badref`.
-Additionally, you could move the executable to your binaries directory with the command:
+Run badref with `./badref`.\n
+Additionally, you could move the executable to your binaries directory:
 ```
 sudo mv badref /usr/local/bin/
 ```
