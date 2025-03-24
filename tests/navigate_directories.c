@@ -31,41 +31,32 @@ DIR *dir;
 struct dirent *drnt;
 
 // ---- signatures -------------------------------------------------------------
-void add_path_slash();
-void get_path_absolute(str content[NAME_MAX]);
+void get_path_absolute();
 void open_directory(u16 content_index);
 void load_path();
 void input_listen();
 char parse_file_type(u8 *type);
 
 // ==== _section_testing =======================================================
-void add_path_slash()
+void get_path_absolute()
 {
-    //TODO: make it work
-    for (u16 i = 0; i < PATH_MAX; ++i)
-        if (!(path[i + 1]) && path[i] != '/')
-        {
-            path[i + 1] = '/';
-            break;
-        }
-}
-
-void get_path_absolute(str content[NAME_MAX])
-{
-    add_path_slash();
-
     str path_relative[PATH_MAX] = {0};
     str *path_absolute;
 
-    snprintf(path_relative, PATH_MAX, "%s%s", path, content);
-    add_path_slash();
+    snprintf(path_relative, PATH_MAX, "%s", path);
     path_absolute = realpath(path_relative, NULL);
     if (!path_absolute)
     {
         free(path_absolute);
         return;
     }
-    add_path_slash();
+    for (u16 i = 0; i < (PATH_MAX - 1); ++i)
+        if (path_absolute[i + 1] == 0 && path_absolute[i] != '/')
+        {
+            strncat(path_absolute, "/", 1);
+            break;
+        }
+
     snprintf(path, PATH_MAX, "%s", path_absolute);
     free(path_absolute);
 }
@@ -74,6 +65,7 @@ void open_directory(u16 content_index)
 {
     str path_next[PATH_MAX] = {0};
     snprintf(path_next, PATH_MAX, "%s%s", path, contents[content_index]);
+    get_path_absolute();
 
     struct stat buf;
     stat(path_next, &buf);
@@ -82,7 +74,7 @@ void open_directory(u16 content_index)
     {
         printf("it's working\n"); //temp
         snprintf(path, PATH_MAX, "%s", path_next);
-        get_path_absolute(contents[content_index]);
+        get_path_absolute();
         load_path();
     }
     else printf("-- ERROR: '%s' is not a directory\n", contents[content_index]);
@@ -198,8 +190,7 @@ int main(void)
     SetWindowPosition((1920/2) - 210, (1080/2) - 210);
 
     snprintf(path, PATH_MAX, "/var/log/../cache/..");
-    get_path_absolute("");
-    printf("%s\n", path);
+    get_path_absolute();
     load_path();
 
     while (running)
