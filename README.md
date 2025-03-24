@@ -23,8 +23,7 @@ cc nob.c -o nob &&
 ./nob
 ```
 
-Run badref with `./badref`.\n
-Additionally, you could move the executable to your binaries directory:
+Run badref with `./badref`. Additionally, you could move the executable to your binaries directory:
 ```
 sudo mv badref /usr/local/bin/
 ```
