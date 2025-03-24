@@ -30,7 +30,7 @@ void swap_strings(str *s1, str *s2)
 
 void sort_string_array()
 {
-    for (u16 i = 0, smallest = 0; i < FILES_MAX && files[i][0]; ++i)
+    for (u16 i = 0, smallest = 0; i < FILES_MAX - 1 && files[i][0]; ++i)
     {
         smallest = i;
         for (u16 j = i + 1; j < FILES_MAX && files[j][0]; ++j)
