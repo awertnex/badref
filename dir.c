@@ -69,6 +69,7 @@ void open_directory(u16 file_index)
                 ++file_count;
             }
             sort_string_array();
+            swap_strings(files[0], files[1]);
 
             closedir(dir);
         }

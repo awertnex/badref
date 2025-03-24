@@ -28,25 +28,27 @@ void swap_strings(str *s1, str *s2)
 		swap_bits(&s1[i], &s2[i], 8);
 }
 
-//TODO: sort the last 2 strings as well
 void sort_string_array()
 {
-	for (u16 i = 0; i < FILES_MAX - 1 && files[i + 1]; ++i)
-	{
-		for (u16 j = 0; j < FILES_MAX - 1 && files[j][0] && files[j + 1][0]; ++j)
-		{
-			if (tolower(files[j][0]) > tolower(files[j + 1][0]))
-                swap_strings(files[j], files[j + 1]);
+    for (u16 i = 0, smallest = 0; i < FILES_MAX && files[i][0]; ++i)
+    {
+        smallest = i;
+        for (u16 j = i + 1; j < FILES_MAX && files[j][0]; ++j)
+        {
+            if (tolower(files[j][0]) < tolower(files[smallest][0]) && files[j][0] && files[smallest][0])
+                smallest = j;
 
-			if (tolower(files[j][0]) == tolower(files[j + 1][0]))
-				for (u16 k = 1; k < NAME_MAX - 1 && files[i][k - 1] && files[i + 1][k - 1]; ++k)
-				{
-					if (tolower(files[j][k]) > tolower(files[j + 1][k]))
-					{
-						swap_strings(files[j], files[j + 1]);
-						break;
-					}
-				}
-		}
-	}
+            if (tolower(files[j][0]) == tolower(files[smallest][0]) && files[j][0] && files[smallest][0])
+                for (u16 k = 1; k < NAME_MAX - 1 && files[j][k - 1] && files[smallest][k - 1]; ++k)
+                {
+                    if (tolower(files[j][k]) < tolower(files[smallest][k]))
+                    {
+                        smallest = j;
+                        break;
+                    }
+                }
+        }
+
+        swap_strings(files[i], files[smallest]);
+    }
 }
