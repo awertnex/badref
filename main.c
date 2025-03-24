@@ -63,17 +63,19 @@ void listen_input()
 {
 	if (IsKeyPressed(KEY_F3))
 		ModeDebug = !ModeDebug;
+
 	if (IsKeyPressed(KEY_ENTER))
 		state ^= STATE_TOOLBAR;
-	if (IsKeyPressed(KEY_E))
-		state ^= STATE_PANE_OUTLINER;
+
+	if (IsKeyPressed(KEY_P))
+        state ^= STATE_PANE_PLAYBACK;
+    if (IsKeyPressed(KEY_UP))
+        state |= STATE_PANE_PLAYBACK;
+    if (IsKeyPressed(KEY_DOWN))
+        state &= ~STATE_PANE_PLAYBACK;
 
 	if (IsKeyPressed(KEY_TAB))
-		state ^= STATE_PANE_PLAYBACK;
-	if (IsKeyPressed(KEY_UP))
-		state |= STATE_PANE_PLAYBACK;
-	if (IsKeyPressed(KEY_DOWN))
-		state &= ~STATE_PANE_PLAYBACK;
+        state ^= STATE_PANE_OUTLINER;
 
 	if (IsKeyPressed(KEY_Q) || IsKeyPressed(KEY_ESCAPE))
 		state &= ~STATE_RUNNING;

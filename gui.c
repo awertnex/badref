@@ -88,7 +88,7 @@ void init_gui()
 	pane_playback.lyr = 0;
 
 	// ---- layer: 1 -----------------------------------------------------------
-	pane_grid_outliner.unit = (v2i16){pane_outliner.scl.x - (margin_item*2), 25};
+	pane_grid_outliner.unit = (v2i16){pane_outliner.scl.x - (margin_item*2), 30};
 }
 
 void update_gui()
@@ -237,8 +237,6 @@ void update_gui()
 			bad_fonts.size_headers,
 			(f32)bad_fonts.size_headers/20,
 			COL_TEXT_DARK, (v2u8){1, 1});
-
-	pane_grid_outliner.unit = (v2i16){pane_outliner.scl.x - (margin_item*2), 50};
 }
 
 void free_gui()
